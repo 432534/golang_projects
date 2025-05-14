@@ -33,7 +33,8 @@ func main() {
 		fmt.Println("\nChoose an option:")
 		fmt.Println("1. Show tasks")
 		fmt.Println("2. Add a task")
-		fmt.Println("3. Exit")
+		fmt.Println("3. Update task status")
+		fmt.Println("4. Exit")
 		fmt.Print("Enter your choice: ")
 
 		input, _ := reader.ReadString('\n')
@@ -48,8 +49,11 @@ func main() {
 			description = strings.TrimSpace(description)
 			addTask(description)
 		case "3":
+			updatetaskstatus()
+		case "4":
 			fmt.Println("Goodbye!")
 			return
+
 		default:
 			fmt.Println("Invalid option. Try again.")
 		}
@@ -106,6 +110,48 @@ func showTask() {
 		)
 	}
 }
+func updatetaskstatus() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter the ID of the task you want to update: ")
+	var idx int
+	_, err := fmt.Scanf("%d\n", &idx)
+	if err != nil {
+		fmt.Println("Enter a valid numeric ID.")
+		return
+	}
+
+	found := false
+	for i, task := range tasks {
+		if task.ID == idx {
+			fmt.Printf("The current status of the task is: %s\n", task.Status)
+			fmt.Print("Enter the new status (pending/in-progress/completed): ")
+			newstatus, _ := reader.ReadString('\n')
+			newstatus = strings.TrimSpace(newstatus)
+
+			if newstatus != "pending" && newstatus != "in-progress" && newstatus != "completed" {
+				fmt.Println("Invalid status. Use: pending, in-progress, or completed.")
+				return
+			}
+
+			tasks[i].Status = newstatus
+			tasks[i].UpdatedAt = time.Now().Unix()
+
+			if err := saveTask(); err != nil {
+				fmt.Println("Error saving task:", err)
+			} else {
+				fmt.Println("Task status updated successfully.")
+			}
+
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		fmt.Println("Task with the given ID not found.")
+	}
+}
+
 func getNextID() int {
 	maxID := 0
 	for _, task := range tasks {
