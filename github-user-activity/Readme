@@ -28,3 +28,4 @@ A simple command-line interface written in Go that fetches and displays the rece
 
 ```bash
 go run main.go <github-username>
+https://roadmap.sh/projects/github-user-activity
