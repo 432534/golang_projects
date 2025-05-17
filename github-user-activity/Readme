@@ -1,0 +1,30 @@
+
+---
+
+## 📊 `github-user-activity/README.md`
+
+This README is specifically for your CLI tool that shows GitHub activity from the terminal.
+
+```markdown
+# GitHub User Activity CLI 📊
+
+A simple command-line interface written in Go that fetches and displays the recent public activity of a GitHub user using the GitHub Events API.
+
+## 📦 Features
+
+- Accepts a GitHub username as an argument
+- Fetches recent public activity from the GitHub API
+- Displays actions like:
+  - Push commits
+  - Open issues
+  - Star repos
+  - Fork repos
+- Handles invalid usernames and API errors gracefully
+- Uses **only the Go standard library**
+
+## 🚀 Usage
+
+### ✅ Run the tool
+
+```bash
+go run main.go <github-username>
