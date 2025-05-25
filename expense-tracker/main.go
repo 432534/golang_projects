@@ -121,6 +121,19 @@ func deleteExpense(Id int) error {
 	}
 	return nil
 }
+func viewExpense() error {
+	expenses, err := loadExpense()
+	if err != nil {
+		panic(err)
+	}
+	if len(expenses) == 0 {
+		fmt.Println("there are no expenses to view")
+	}
+	for _, exp := range expenses {
+		fmt.Printf("Id: %d | description: %s | amount: %.2f | date: %s\n", exp.ID, exp.Description, exp.Amount, exp.Date)
+	}
+	return nil
+}
 func main() {
 	fmt.Println("We are going to develop CLi for expense-tracker")
 	if os.Args[1] == "add" {
@@ -166,6 +179,12 @@ func main() {
 		err := deleteExpense(*Id)
 		if err != nil {
 			fmt.Println("Error in deleting the expense", err)
+		}
+	}
+	if os.Args[1] == "view" {
+		err := viewExpense()
+		if err != nil {
+			fmt.Println("there is error in viewing the expenses", err)
 		}
 	}
 }
