@@ -79,7 +79,7 @@ func updateExpense(description string, amount float64, Id int) error {
 			if description != "" {
 				expenses[i].Description = description
 			}
-			if amount < 0 {
+			if amount > 0 {
 				expenses[i].Amount = amount
 			}
 			update = true
@@ -97,10 +97,34 @@ func updateExpense(description string, amount float64, Id int) error {
 	fmt.Println("Expense updated successfully")
 	return nil
 }
+func deleteExpense(Id int) error {
+	expenses, err := loadExpense()
+	if err != nil {
+		panic(err)
+	}
+	found := false
+	var newExpense = []Expense{}
+	for _, exp := range expenses {
+		if exp.ID == Id {
+			found = true
+			continue
+		}
+		newExpense = append(newExpense, exp)
+	}
+
+	if !found {
+		return fmt.Errorf("no expense found with ID: %d", Id)
+	}
+	err = saveExpenses(newExpense)
+	if err != nil {
+		fmt.Println("Error in saving the deleted expenses")
+	}
+	return nil
+}
 func main() {
 	fmt.Println("We are going to develop CLi for expense-tracker")
 	if os.Args[1] == "add" {
-		if len(os.Args) < 2 || os.Args[1] != "add" {
+		if len(os.Args) < 2 {
 			println("Provide a valid argument")
 		}
 		addflag := flag.NewFlagSet("add", flag.ExitOnError)
@@ -130,6 +154,18 @@ func main() {
 		err := updateExpense(*newdesc, *newamt, *Id)
 		if err != nil {
 			fmt.Println("Error in updating the expense", err)
+		}
+	}
+	if os.Args[1] == "delete" {
+		deleteflag := flag.NewFlagSet("delete", flag.ExitOnError)
+		Id := deleteflag.Int("id", 0, "id to delete")
+		if *Id < 0 {
+			fmt.Println("Please provide the valid id for deletion")
+		}
+		deleteflag.Parse(os.Args[2:])
+		err := deleteExpense(*Id)
+		if err != nil {
+			fmt.Println("Error in deleting the expense", err)
 		}
 	}
 }
