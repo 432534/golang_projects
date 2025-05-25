@@ -10,5 +10,11 @@
     "date": "2025-05-25",
     "description": "Breakfast",
     "amount": 100
+  },
+  {
+    "id": 3,
+    "date": "2025-05-25",
+    "description": "Breakfast",
+    "amount": 55.65
   }
 ]

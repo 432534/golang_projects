@@ -134,6 +134,21 @@ func viewExpense() error {
 	}
 	return nil
 }
+func viewSummayofExpense() error {
+	expenses, err := loadExpense()
+	if err != nil {
+		panic(err)
+	}
+	if len(expenses) == 0 {
+		fmt.Println("you have'nt spent any money yet")
+	}
+	total := 0.0
+	for _, exp := range expenses {
+		total += exp.Amount
+	}
+	fmt.Printf("The total expenses that you have done is:  ₹%.2f\n", total)
+	return nil
+}
 func main() {
 	fmt.Println("We are going to develop CLi for expense-tracker")
 	if os.Args[1] == "add" {
@@ -184,7 +199,13 @@ func main() {
 	if os.Args[1] == "view" {
 		err := viewExpense()
 		if err != nil {
-			fmt.Println("there is error in viewing the expenses", err)
+			fmt.Println("there is an error in viewing the expenses", err)
+		}
+	}
+	if os.Args[1] == "summary" {
+		err := viewSummayofExpense()
+		if err != nil {
+			fmt.Println("there is an error in viewing the summay of the expenses", err)
 		}
 	}
 }
